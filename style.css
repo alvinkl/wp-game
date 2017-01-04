@@ -58,12 +58,6 @@ button {
     cursor: pointer;
 }
 
-.next {
-    background-color: #3498db;
-    box-shadow: 0 5px 0 0 #2980b9;
-    display: none;
-}
-
 #restart {
     background-color: #e74c3c;
     box-shadow: 0 5px 0 0 #c0392b;

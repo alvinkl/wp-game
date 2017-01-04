@@ -15,23 +15,16 @@ var wordCounter = 0;
 var reset = document.getElementById('restart');
 var next = document.getElementsByClassName('next');
 
-const list =
-`<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
-
-    </body>
-</html>        `;
-
-/* making list as an array */
-var arrList = list.split('\n').map(tag => tag.trim()).filter(i => i !== '');
-
-console.log(arrList)
-
+button.addEventListener("click", function(e){
+    // GET WORDS
+    $.get('url', (words) => {
+        const list = words;
+        var arrList = list.split('\n').map(tag => tag.trim()).filter(i => i !== '');
+        countdown();
+    	generateWord();
+    	button.disabled = true;
+    })
+});
 
 function countdown() {
 	points = 0;
@@ -40,29 +33,29 @@ function countdown() {
     	seconds--;
     	temp.innerHTML = seconds;
     	if (seconds === 0) {
-        let score += points + seconds;
-        // PASSING SCORE BEFORE SHOWING MODAL
-        $.ajax({
-          method: 'POST',
-          url: '',
-          data: {
-            score: score
-          }
-        })
-          .done(() => {
-            $('#modal').modal('show');
-            document.getElementsByClassName('modal-title')[0].innerHTML = 'Great Job!'
-            document.getElementById('modaltxt').innerHTML = 'Try Again';
-            document.getElementById('total').innerHTML += score;
-          })
+            let score += points + seconds;
+            // PASSING SCORE BEFORE SHOWING MODAL
+            $.ajax({
+              method: 'POST',
+              url: '',
+              data: {
+                score: score
+              }
+            })
+              .done(() => {
+                $('#modal').modal('show');
+                document.getElementsByClassName('modal-title')[0].innerHTML = 'Great Job!'
+                document.getElementById('modaltxt').innerHTML = 'Try Again';
+                document.getElementById('total').innerHTML += score;
+              })
 
-        reset.disabled = false;
-        reset.style.display = 'inline';
+            reset.disabled = false;
+            reset.style.display = 'inline';
 
-        next[0].disabled = true;
-        next[0].style.display = 'none';
-        next[1].disabled = true;
-        next[1].style.display = 'none';
+            next[0].disabled = true;
+            next[0].style.display = 'none';
+            next[1].disabled = true;
+            next[1].style.display = 'none';
 
     		scoreDiv.innerHTML = "0";
     		words.innerHTML = "";
@@ -86,17 +79,6 @@ function generateWord() {
 	}
 	spans = document.querySelectorAll(".span");
 }
-
-
-button.addEventListener("click", function(e){
-  // GETTING USER ID
-  // $.get('url', (data) => {
-  //   userid = data.id;
-  // })
-	countdown();
-	generateWord();
-	button.disabled = true;
-});
 
 
 function typing(e) {
@@ -139,21 +121,6 @@ function check() {
                 if (ind < arrList.length) {
                     generateWord(); // give another word
                     document.addEventListener("keydown", typing, false);
-                }
-                else {
-                  $.ajax({
-                    method: 'POST',
-                    url: '',
-                    data: {
-                      score: score
-                    }
-                  })
-                    .done(() => {
-                      $('#modal').modal('show');
-                      document.getElementsByClassName('modal-title')[0].innerHTML = 'Great Job!'
-                      document.getElementById('modaltxt').innerHTML = 'Try Again';
-                      document.getElementById('total').innerHTML += score;
-                    })
                 }
             }, 400);
             wordCounter++;
